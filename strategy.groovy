@@ -6,19 +6,27 @@ String.metaClass.upcase = {->
     string_buffer.toString()
 }
 
+String.metaClass.downcase = {->
+    def string_buffer = new StringBuffer()
+    delegate.each {
+        string_buffer << (Character.isUpperCase(it as char) ? Character.toLowerCase(it as char) : it as char)
+    }
+    string_buffer.toString()
+}
+
 interface Strategy { def call(string) }
 
 class StrategyOne implements Strategy {
 
     def call(string) {
-        string.reverse()
+        string.downcase().reverse().capitalize()
     }
 }
 
 class StrategyTwo implements Strategy {
 
     def call(string) {
-        string.capitalize()
+        string.downcase().capitalize()
     }
 }
 
@@ -30,7 +38,7 @@ class StrategyThree implements Strategy {
 }
 
 
-def test_string = "groovy strategy pattern"
+def test_string = "groovy stRAtEGy PAttERn"
 
 Strategy[] stringManipulationStrategies = [new StrategyOne(), new StrategyTwo(), new StrategyThree()]
 
